@@ -8,7 +8,17 @@ namespace DependencyInjectionContainer
 {
     class DependencyProvider : IDependencyProvider
     {
+        public DependencyProvider(DependencyConfiguration configuration)
+        {
+
+        }
+
         public TDependency Resolve<TDependency>()
+        {
+            throw new NotImplementedException();
+        }
+
+        private bool ValidateConfiguration(DependencyConfiguration configuration)
         {
             throw new NotImplementedException();
         }

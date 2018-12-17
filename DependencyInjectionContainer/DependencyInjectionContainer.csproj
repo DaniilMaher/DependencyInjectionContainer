@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="Dependency.cs" />
     <Compile Include="Impl\DependenciesConfiguration.cs" />
     <Compile Include="Impl\DependencyProvider.cs" />
     <Compile Include="Interface\IDependenciesConfiguration.cs" />
