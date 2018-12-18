@@ -39,9 +39,19 @@ namespace DependencyInjectionContainer
             }
         }
 
-        public void Register<TDependency, TImplementation>(bool isSingleton) where TImplementation : class, TDependency
+        public void Register<TDependency, TImplementation>(bool isSingleton) where TDependency : class where TImplementation : TDependency
         {
             Register(typeof(TDependency), typeof(TImplementation), isSingleton);
+        }
+
+        public Dependency FindDependency(Type tDependency)  
+        {
+            return dependencies.Find(d => (d.TDependency == tDependency));
+        }
+
+        public List<Dependency> FindAllDependencies(Type tDependency)
+        {
+            return dependencies.FindAll(d => (d.TDependency == tDependency));
         }
     }
 }
