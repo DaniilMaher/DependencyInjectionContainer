@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 namespace DependencyInjectionContainer
 {
-    class DependencyProvider : IDependencyProvider
+    public class DependencyProvider : IDependencyProvider
     {
         private static object obj = new object();
         private DependencyConfiguration configuration;
@@ -34,6 +34,10 @@ namespace DependencyInjectionContainer
             if (dependency == null && type.IsGenericType)
             {
                 dependency = configuration.FindDependency(type.GetGenericTypeDefinition());
+                if (dependency != null)
+                {
+                    return (TDependency)ResolveGeneric(type, dependency);
+                }
             }
             if (dependency != null)
             {
@@ -47,6 +51,13 @@ namespace DependencyInjectionContainer
             return configuration != null;
         }
 
+        private object ResolveGeneric(Type requiredType, Dependency dependency)
+        {
+            Type tImplementation = dependency.TImplementation.MakeGenericType(requiredType.GenericTypeArguments);
+            dependency.Instance = Create(tImplementation);
+            return dependency.Instance;
+        }
+
         private object Resolve(Dependency dependency)
         {
             if (dependency.IsSingleton && dependency.Instance != null)
@@ -58,12 +69,18 @@ namespace DependencyInjectionContainer
             {
                 tImplementation = tImplementation.MakeGenericType(dependency.TDependency.GenericTypeArguments);
             }
+            dependency.Instance = Create(tImplementation);
+            return dependency.Instance;
+
+        }
+
+        private object Create(Type tImplementation)
+        {
             ConstructorInfo constructor = tImplementation.GetConstructors()
                                 .OrderByDescending(x => x.GetParameters().Length)
                                 .FirstOrDefault();
             object[] parameters = ResolveConstructorParameters(constructor);
-            dependency.Instance = Activator.CreateInstance(tImplementation, parameters);
-            return dependency.Instance;
+            return Activator.CreateInstance(tImplementation, parameters);
         }
 
         private object[] ResolveConstructorParameters(ConstructorInfo constructor)

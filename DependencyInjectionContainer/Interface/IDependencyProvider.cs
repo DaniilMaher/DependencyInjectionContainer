@@ -1,6 +1,6 @@
 ﻿namespace DependencyInjectionContainer
 {
-    interface IDependencyProvider
+    public interface IDependencyProvider
     {
         TDependency Resolve<TDependency>() where TDependency : class;
     }

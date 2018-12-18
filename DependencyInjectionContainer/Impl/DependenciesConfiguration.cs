@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DependencyInjectionContainer
 {
-    class DependencyConfiguration
+    public class DependencyConfiguration
     {
         private List<Dependency> dependencies;
 
